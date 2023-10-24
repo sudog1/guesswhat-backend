@@ -21,10 +21,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
-
+    
     username = models.CharField(
         "username",
         max_length=64,
@@ -58,3 +57,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return self.is_admin
+
+
+class History(models.Model):
+    ACTION_CHOICE = (("likes", "likes"),("quiz", "quiz"),("hint", "hint"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="history")
+    action = models.CharField(max_length=20,choices=ACTION_CHOICE, default="likes")
+    created_at = models.DateTimeField(auto_now_add=True)
+    point = models.PositiveIntegerField()
