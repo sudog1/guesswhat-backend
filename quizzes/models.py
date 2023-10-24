@@ -24,14 +24,13 @@ class Quiz(models.Model):
 
 class Comment(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="comments",)
-    user=models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='comments')
+    author=models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='comments')
     content=models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 class Answer(models.Model):
     quiz = models.OneToOneField(Quiz,on_delete=models.CASCADE)
-    user = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='answers')
+    author = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='answers')
     content=models.CharField(max_length=128)                        
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
