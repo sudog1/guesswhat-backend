@@ -6,9 +6,6 @@ def image_file_path(instance, filename):
     return f"images/{instance.author.nickname}/{filename}"
 
 
-# Create your models here.
-
-
 class Quiz(models.Model):
     author = models.ForeignKey(
         AUTH_USER_MODEL,
@@ -16,8 +13,8 @@ class Quiz(models.Model):
         related_name="quizzes",
         null=True,
     )
-    correct_answer = models.CharField(max_length=50)
-    hint = models.CharField(max_length=128, blank=True)
+    correct_answer = models.CharField(max_length=30)
+    hint = models.CharField(max_length=50)
     solved = models.BooleanField(default=False)
     image = models.ImageField(upload_to=image_file_path)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -36,7 +33,7 @@ class Comment(models.Model):
     author = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments"
     )
-    content = models.CharField(max_length=128)
+    content = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -45,5 +42,5 @@ class Answer(models.Model):
     author = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="answers"
     )
-    content = models.CharField(max_length=128)
+    content = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)

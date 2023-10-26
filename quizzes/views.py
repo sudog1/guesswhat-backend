@@ -89,10 +89,12 @@ class HintView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, quiz_id):
+        user = request.user
+        if user.point < constant.HINT_DEDUCTED_POINT:
+            return Response({"detail": "포인트가 부족합니다."}, status=status.HTTP_200_OK)
         quiz = get_object_or_404(Quiz, pk=quiz_id)
         hint = quiz.hint
-        user = request.user
-        user.point = F("point") + constant.HINT_DEDUCTED_POINT
+        user.point = F("point") - constant.HINT_DEDUCTED_POINT
         user.save()
         user.refresh_from_db()
         History.objects.create(user=user, action="hint", point=user.point)
@@ -149,9 +151,9 @@ class CommentsView(APIView):
     def post(self, request, quiz_id):
         quiz = get_object_or_404(Quiz, pk=quiz_id)
         user = request.user
-        if user==quiz.author:
+        if user == quiz.author:
             return Response({"detail": "권한이 없습니다"}, status=status.HTTP_403_FORBIDDEN)
-        
+
         if quiz.solved != True:
             if request.data.get("content") == quiz.correct_answer:
                 serializer = AnswerCreateSerializer(data=request.data)
@@ -187,12 +189,12 @@ class ImageView(APIView):
         user = request.user
         prompt = request.data.get("prompt")
         print(prompt)
-        if user.point < 1:
+        if user.point < constant.API_REQUEST_POINT:
             return Response({"detail": "포인트가 부족합니다."}, status=status.HTTP_403_FORBIDDEN)
         user.point = F("point") - constant.API_REQUEST_POINT
         user.save()
         user.refresh_from_db()
-        History.objects.create(user=user, action="quiz", point=user.point)
+        History.objects.create(user=user, action="create", point=user.point)
         translator = deepl.Translator(DEEPL_API_KEY)
         result = translator.translate_text(prompt, target_lang="EN-US")
         return Response(

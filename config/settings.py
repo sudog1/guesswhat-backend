@@ -1,4 +1,3 @@
-import os
 import environ
 from pathlib import Path
 from datetime import timedelta
@@ -18,7 +17,7 @@ env = environ.Env(
 # Set the project base directory
 
 # Take environment variables from .env file
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+environ.Env.read_env(BASE_DIR / ".env")
 
 # False if not in os.environ because of casting above
 DEBUG = env("DEBUG")
@@ -146,7 +145,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.User"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=720),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
