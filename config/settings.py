@@ -29,7 +29,7 @@ KARLO_API_KEY = env("KARLO_API_KEY")
 DEEPL_API_KEY = env("DEEPL_API_KEY")
 
 CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".ap-northeast-2.compute.amazonaws.com"]
 
 
 # Application definition
