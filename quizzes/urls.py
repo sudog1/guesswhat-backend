@@ -12,4 +12,6 @@ urlpatterns = [
     path("<int:quiz_id>/likes/", views.LikesView.as_view(), name="likes"),
     # 댓글 조회/등록
     path("<int:quiz_id>/comments/", views.CommentsView.as_view(), name="comments"),
+    # apikey 요청
+    path("image/", views.ImageView.as_view(), name="image"),
 ]
