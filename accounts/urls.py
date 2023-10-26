@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenBlacklistView,
 )
-from .views import UserView
+from .views import UserView, RankingView
 
 urlpatterns = [
     # 로그인
@@ -17,4 +17,8 @@ urlpatterns = [
     path("", UserView.as_view(), name="account"),
     # 프로필 정보조회
     path("<int:user_id>/", UserView.as_view(), name="account_profile"),
+    # 명예의전당?
+    path("ranking/", RankingView.as_view(), name="ranking"),
+    # 나의랭킹
+    path("<int:user_id>/ranking/", RankingView.as_view(), name="myranking"),
 ]

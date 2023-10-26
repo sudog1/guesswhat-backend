@@ -21,29 +21,30 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
-    
+
     username = models.CharField(
         "username",
-        max_length=64,
+        max_length=30,
         unique=True,
         validators=[username_validator],
     )
     email = models.EmailField(
         "email",
-        max_length=64,
+        max_length=50,
         unique=True,
     )
     nickname = models.CharField(
         "nickname",
-        max_length=32,
+        max_length=30,
         unique=True,
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    
-    point=models.PositiveIntegerField(default=10)
+
+    point = models.PositiveIntegerField(default=100)
 
     objects = UserManager()
 
@@ -60,8 +61,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class History(models.Model):
-    ACTION_CHOICE = (("likes", "likes"),("quiz", "quiz"),("hint", "hint"))
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="history")
-    action = models.CharField(max_length=20,choices=ACTION_CHOICE, default="likes")
+    ACTION_CHOICE = (
+        ("likes", "likes"),
+        ("quiz", "quiz"),
+        ("hint", "hint"),
+        ("create", "create"),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="history")
+    action = models.CharField(max_length=10, choices=ACTION_CHOICE, default="likes")
     created_at = models.DateTimeField(auto_now_add=True)
     point = models.PositiveIntegerField()

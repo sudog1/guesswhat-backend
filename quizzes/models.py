@@ -1,7 +1,10 @@
 from django.db import models
 from config.settings import AUTH_USER_MODEL
 
-# Create your models here.
+
+def image_file_path(instance, filename):
+    return f"images/{instance.author.nickname}/{filename}"
+
 
 class Quiz(models.Model):
     author = models.ForeignKey(
@@ -10,27 +13,34 @@ class Quiz(models.Model):
         related_name="quizzes",
         null=True,
     )
-    correct_answer = models.CharField(max_length=50)
-    hint = models.CharField(max_length=128, blank=True)
+    correct_answer = models.CharField(max_length=30)
+    hint = models.CharField(max_length=50)
     solved = models.BooleanField(default=False)
-    image = models.CharField(max_length=255,blank=True)
+    image = models.ImageField(upload_to=image_file_path)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(
         AUTH_USER_MODEL,
-        related_name="quizzes_likes",
+        related_name="likes",
     )
 
 
 class Comment(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="comments",)
-    author=models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='comments')
-    content=models.CharField(max_length=128)
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        related_name="comments",
+    )
+    author = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments"
+    )
+    content = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
 
 class Answer(models.Model):
-    quiz = models.OneToOneField(Quiz,on_delete=models.CASCADE)
-    author = models.ForeignKey(AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='answers')
-    content=models.CharField(max_length=128)                        
+    quiz = models.OneToOneField(Quiz, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="answers"
+    )
+    content = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
