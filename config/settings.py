@@ -28,11 +28,13 @@ SECRET_KEY = env("SECRET_KEY")
 KARLO_API_KEY = env("KARLO_API_KEY")
 DEEPL_API_KEY = env("DEEPL_API_KEY")
 
-CORS_ALLOW_ALL_ORIGINS = True
 ALLOWED_HOSTS = [".ap-northeast-2.compute.amazonaws.com"]
-
+CORS_ALLOWED_ORIGINS = [
+    "https://guesswhat.o-r.kr",
+]
 
 # Application definition
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -54,6 +56,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     )
 }
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
